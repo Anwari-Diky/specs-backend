@@ -1,5 +1,4 @@
-CREATE DATABASE IF NOT EXISTS specsshop;
-USE specsshop;
+
 
 CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(50) PRIMARY KEY,
