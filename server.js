@@ -19,13 +19,21 @@ const userRoutes = require('./routes/userRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 
 // Temporary route to sync database
-const fs = require('fs');
-const db = require('./config/db');
+const mysql = require('mysql2/promise');
 app.get('/api/sync-db', async (req, res) => {
     try {
         const sqlPath = path.join(__dirname, 'init_db.sql');
-        const sqlQuery = fs.readFileSync(sqlPath, 'utf8');
-        await db.query(sqlQuery);
+        const sqlQuery = require('fs').readFileSync(sqlPath, 'utf8');
+        const conn = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            port: process.env.DB_PORT || 3306,
+            multipleStatements: true
+        });
+        await conn.query(sqlQuery);
+        await conn.end();
         res.json({ message: 'Database successfully synced to match local products!' });
     } catch (err) {
         res.status(500).json({ error: err.message });
