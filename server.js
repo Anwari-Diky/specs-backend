@@ -18,6 +18,20 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 const userRoutes = require('./routes/userRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 
+// Temporary route to sync database
+const fs = require('fs');
+const db = require('./config/db');
+app.get('/api/sync-db', async (req, res) => {
+    try {
+        const sqlPath = path.join(__dirname, 'init_db.sql');
+        const sqlQuery = fs.readFileSync(sqlPath, 'utf8');
+        await db.query(sqlQuery);
+        res.json({ message: 'Database successfully synced to match local products!' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Use Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
