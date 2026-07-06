@@ -28,6 +28,35 @@ app.use('/api/users', userRoutes);
 // Serve static files (uploads)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Temporary route to initialize DB on Railway
+app.get('/api/init-db', async (req, res) => {
+    try {
+        const fs = require('fs');
+        const db = require('./config/db');
+        const sqlPath = path.join(__dirname, 'init_db.sql');
+        const sqlQuery = fs.readFileSync(sqlPath, 'utf8');
+        
+        // MySQL connection from pool might not support multipleStatements by default,
+        // but we can create a temporary connection
+        const mysql = require('mysql2/promise');
+        const tempConn = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            port: process.env.DB_PORT || 3306,
+            multipleStatements: true
+        });
+        
+        await tempConn.query(sqlQuery);
+        await tempConn.end();
+        
+        res.send('<h1>✅ Database berhasil di-inisialisasi dengan tabel dan akun admin!</h1>');
+    } catch (error) {
+        res.status(500).send('<h1>❌ Gagal inisialisasi:</h1><pre>' + error.message + '</pre>');
+    }
+});
+
 // Base route
 app.get('/', (req, res) => {
     res.send('API is running...');
