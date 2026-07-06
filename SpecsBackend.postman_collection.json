@@ -1,0 +1,756 @@
+{
+	"info": {
+		"_postman_id": "b1a134d1-c277-448f-9e7f-61e88e89f890",
+		"name": "SpecsBackend API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData.token) {",
+									"    pm.environment.set(\"token\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Single Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Product (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama",
+									"value": "Specs Accelerator",
+									"type": "text"
+								},
+								{
+									"key": "deskripsi",
+									"value": "Sepatu bola specs terbaik",
+									"type": "text"
+								},
+								{
+									"key": "harga",
+									"value": "500000",
+									"type": "text"
+								},
+								{
+									"key": "kategori",
+									"value": "Sepatu Bola",
+									"type": "text"
+								},
+								{
+									"key": "stok",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "gambar",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "rating",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Product (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "harga",
+									"value": "450000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Product (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					}
+				},
+				{
+					"name": "Add to Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": 1,\n    \"quantity\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Remove from Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Wishlist",
+			"item": [
+				{
+					"name": "Get Wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/wishlist",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"wishlist"
+							]
+						}
+					}
+				},
+				{
+					"name": "Add to Wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/wishlist",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"wishlist"
+							]
+						}
+					}
+				},
+				{
+					"name": "Remove from Wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/wishlist/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"wishlist",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Order By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders/TRX-123456",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"TRX-123456"
+							]
+						}
+					}
+				},
+				{
+					"name": "Checkout Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"items\": [\n        {\n            \"productId\": 1,\n            \"nama\": \"Specs Accelerator\",\n            \"harga\": 500000,\n            \"quantity\": 2\n        }\n    ],\n    \"totalHarga\": 1000000,\n    \"pengiriman\": {\n        \"namaLengkap\": \"John Doe\",\n        \"alamat\": \"Jl. Sudirman No 123, Jakarta\",\n        \"nomorHP\": \"081234567890\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/checkout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"checkout"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Order Status (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Diproses\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/TRX-123456/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"TRX-123456",
+								"status"
+							]
+						}
+					}
+				}
+	]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/user_123",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"user_123"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/user_123/role",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"user_123",
+								"role"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/user_123",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"user_123"
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		}
+	]
+}
