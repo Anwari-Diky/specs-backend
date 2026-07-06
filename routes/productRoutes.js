@@ -50,7 +50,7 @@ router.post('/', protect, admin, upload.single('gambar'), async (req, res) => {
         
         let gambarUrl = req.body.gambar || 'https://placehold.co/400x400?text=Produk';
         if (req.file) {
-            gambarUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+            gambarUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
 
         await db.query(
@@ -71,7 +71,7 @@ router.put('/:id', protect, admin, upload.single('gambar'), async (req, res) => 
         const { nama, harga, kategori, deskripsi, stok, rating } = req.body;
         let gambarUrl = req.body.gambar;
         if (req.file) {
-            gambarUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+            gambarUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
         
         const [result] = await db.query(
